@@ -19,19 +19,33 @@ function onInput(event) {
     ...formData,
     [event.target.name]: event.target.value,
   };
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  try {
+    localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  } catch (error) {
+    console.error('Set state error: ', error.message);
+  }
 }
 
 function onFormSubmit(event) {
   event.preventDefault();
   console.log(formData);
-  localStorage.removeItem('feedback-form-state');
+  try {
+    localStorage.removeItem('feedback-form-state');
+  } catch (erorr) {
+    console.error('Set state error: ', error.message);
+  }
+
   refs.form.reset();
   formData = { email: '', message: '' };
 }
 
 function setCurrentData() {
-  const currentData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  let currentData;
+  try {
+    currentData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  } catch (error) {
+    console.error('Set state error: ', error.message);
+  }
 
   if (!currentData) {
     return;

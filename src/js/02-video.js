@@ -4,13 +4,22 @@ import { throttle } from 'throttle-debounce';
 const iframe = document.querySelector('#vimeo-player');
 
 const player = new Player(iframe);
+let currentTime;
 
 player.on('timeupdate', throttle(1000, onCurrentTime));
 function onCurrentTime(data) {
-  localStorage.setItem('videoplayer-current-time', data.seconds);
+  try {
+    localStorage.setItem('videoplayer-current-time', data.seconds);
+  } catch (error) {
+    console.error('Set state error: ', error.message);
+  }
 }
 
-const currentTime = localStorage.getItem('videoplayer-current-time');
+try {
+  currentTime = localStorage.getItem('videoplayer-current-time');
+} catch (error) {
+  console.error('Set state error: ', error.message);
+}
 
 if (currentTime) {
   player.setCurrentTime(currentTime).catch(function (error) {
